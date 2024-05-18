@@ -1,52 +1,107 @@
-object registroProduccion {
-	const registroDePiezas = []
+object casaAntiguedades {
 	
-	method agregarAlRegistro(cantPiezas) {
-		registroDePiezas.add(cantPiezas)
+	const antiguedades = []
+	var fondos = 0
+	
+	method retornarAntiguedades() = 
+		antiguedades.clear()
+	
+	method adquirirAntiguedad(antiguedad) = 
+		antiguedades.add(antiguedad)
+	
+	method adquirirLote(lote) = 
+		antiguedades.addAll(lote)
+	
+	method hayEnStock(antiguedad) = 
+		antiguedades.contains(antiguedad)
+		
+	method cantidadDeAntiguedades() =
+		antiguedades.size()
+		
+	method ultimaAdquisicion() =
+		antiguedades.last()
+	
+	method esMuyAntiguo(antiguedad) = 
+		antiguedad.antiguedad() > 100
+	
+	method localizarAntiguedad(posicion) =
+		antiguedades.get(posicion)
+		
+	method antiguedadDeXArticulo(posicion){
+		var articuloBuscado
+		
+		articuloBuscado = self.localizarAntiguedad(posicion)
+		return articuloBuscado.antiguedad()
 	}
 	
-	method quitarAlRegistro(cantPiezas) {
-		registroDePiezas.remove(cantPiezas)
+	method restaurarPrimera() {
+		antiguedades.first().restaurar()
 	}
 	
-	method algunDiaSeProdujo(cantidad) {
-		return registroDePiezas.contains(cantidad)
+	method restaurarUltimo() {
+		antiguedades.last().restaurar()
 	}
 	
-	method maximoValorDeProduccion() {
-		return registroDePiezas.max()
+	method restaurarXAntiguedad(posicion){
+		var antiguedadBuscada
+		
+		antiguedadBuscada = self.localizarAntiguedad(posicion)
+		antiguedadBuscada.restaurar()
 	}
 	
-	method valoresDeProduccionPares() {
-		return registroDePiezas.filter({r => r.even()})
+	method restaurarAntiguedadEnMalEstado(antiguedad) {
+		if (not antiguedad.estaEnBuenEstado()) {
+			antiguedad.restaurar()
+		}
 	}
 	
-	method produccionEsAcotada(valor1,valor2) {
-		return registroDePiezas.all({r => r.between(valor1,valor2)})
+	method venderTodasLasAntiguedades(){
+		fondos = antiguedades.sum({g => g.precio()})
+		self.retornarAntiguedades()
+		return fondos
 	}
 	
-	method produccionesSuperioresA(valor) {
-		return registroDePiezas.filter({r => r > valor})
+}
+
+class Lote {
+	
+	const contenido = []
+	
+	method sumarAntiguedad(antiguedad) =
+	contenido.add(antiguedad)
+	
+	method vaciarContenido() = contenido.clear()
+}
+
+class Antiguedad {
+	
+	var edadDeAntiguedad = 0
+	var restaurado = false
+	var precio = 0
+	var buenEstado = false
+	
+	method setAntiguedad(edad) {
+		edadDeAntiguedad = edad
 	}
 	
-	method produccionesSumando(valor) {
-		registroDePiezas.map({r => r + valor})
+	method antiguedad() = edadDeAntiguedad
+	
+	method setPrecio(precioNuevo) {
+		precio = precioNuevo 
 	}
 	
-	method totalProducido() {
-		return registroDePiezas.sum()
+	method precio() = precio
+	
+	method restaurar(){
+		restaurado = true
 	}
 	
-	method ultimoValorDeProduccion() {
-		return registroDePiezas.last()
+	method estaRestaurado() = restaurado
+	
+	method setBuenEstado(){
+		buenEstado = not buenEstado
 	}
 	
-	method primerValorDeProduccion() {
-		return registroDePiezas.first()
-	}
-	
-	method cantidadProduccionesMayorALaPrimera() {
-		return registroDePiezas.count({r => r > self.primerValorDeProduccion()})
-	}
+	method estaEnBuenEstado() = buenEstado
 	
 }
