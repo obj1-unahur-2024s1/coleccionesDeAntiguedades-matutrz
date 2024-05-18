@@ -56,7 +56,7 @@ object casaAntiguedades {
 	}
 	
 	method venderTodasLasAntiguedades(){
-		fondos = antiguedades.sum({g => g.precio()})
+		fondos = antiguedades.sum({a => a.precio()})
 		self.retornarAntiguedades()
 		return fondos
 	}
